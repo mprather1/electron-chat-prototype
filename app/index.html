@@ -2,14 +2,14 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>Chat!</title>
      <link href="../node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css"/>    
     <link href="css/index.css" rel="stylesheet" type="text/css"/>    
   </head>
   <body>
-    <div class="navbar navbar-inverse">
+    <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-header">
-        <a href="#" class="navbar-brand active">Title</a>
+        <a href="#" class="navbar-brand active">Chat</a>
       </div>
     </div>    
       <section class="module">
@@ -18,7 +18,7 @@
           </header>
           
           <div class="discussion"></div>
-          <form id="form-submit">
+          <form id="form-submit" style="-webkit-app-region: no-drag">
             <input id="m" autocomplete="off" placeholder="Type a message..." /><button id='clicker'>Send</button>
           </form>
       </section>

@@ -1,5 +1,19 @@
 const {ipcRenderer} = require('electron')
 let $ = require('jquery')
+const Handlebars = require('handlebars')
+
+var messageTemplate = Handlebars.compile(`\
+  <li> 
+    <div class="avatar"> 
+      <img src="#" /> 
+    </div>
+    <div class="messages"> 
+      <strong>{{ author }}</strong> wrote:
+      <p>{{ content }}</p> 
+      at <time>{{ created_at }}</time>
+    </div>
+  </li>
+`)
 
 ipcRenderer.send('connected', 'success')
 ipcRenderer.send('get', 'all')
@@ -7,16 +21,14 @@ ipcRenderer.send('get', 'all')
 ipcRenderer.on('messages', (event, arg) => {
   var body = JSON.parse(arg.toString())
 
-  $('#message').html('')
-
   for (let message of body) {
-    $('#message').append(`<li>${message.author} commented on ${message.created_at}:<br> ${message.content}</li>`)
+    $('#message').prepend(getTemplate(message))
   }
 })
 
 ipcRenderer.on('reply', (event, arg) => {
   var message = JSON.parse(arg)
-  $('#message').append(`<li>${message.author} commented on ${new Date()}:<br> ${message.content}</li>`)
+  $('#message').prepend(getTemplate(message))
 })
 
 var button = document.getElementById('clicker')
@@ -31,3 +43,13 @@ button.addEventListener('click', function (e) {
 
   ipcRenderer.send('asynchronous-message', JSON.stringify(messageAttrs))
 })
+
+function getTemplate (message) {
+  var retval = {
+    author: message.author,
+    content: message.content,
+    created_at: message.created_at
+  }
+  var html = messageTemplate(retval)
+  return html
+}

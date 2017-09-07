@@ -8,7 +8,12 @@ var socket = io.connect('ws://localhost:55445')
 let win
 
 function createWindow () {
-  win = new BrowserWindow({width: 800, height: 800, frame: false, resizable: false})
+  win = new BrowserWindow({
+    width: 800,
+    height: 800,
+    frame: false,
+    resizable: true
+  })
 
   ipcMain.once('connected', (event, arg) => {
     socket.on('message', message => {
@@ -46,7 +51,6 @@ ipcMain.on('get', (event, arg) => {
 
     stream.on('end', () => {
       event.sender.send('messages', body)
-      event.sender.send('test', ipcMain)
     })
   }
 })
