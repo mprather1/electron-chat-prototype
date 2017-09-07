@@ -1,0 +1,7 @@
+body {
+    -webkit-app-region: drag;
+}
+
+.module {
+    -webkit-app-region: no-drag    
+}
