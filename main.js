@@ -33,8 +33,9 @@ function createWindow () {
 
   ipcMain.once('connected', (event, arg) => {
     loginView.close()
-    socket.on('message', message => {
-      event.sender.send('reply', message)
+
+    socket.on('message', (message, result) => {
+      event.sender.send('reply', message, result)
     })
   })
 
@@ -98,9 +99,3 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
-// app.on('activate', () => {
-//   if (win === null) {
-//     createWindow()
-//   }
-// })

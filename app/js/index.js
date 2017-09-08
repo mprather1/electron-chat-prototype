@@ -13,8 +13,9 @@ ipcRenderer.on('messages', (event, arg) => {
   }
 })
 
-ipcRenderer.on('reply', (event, arg) => {
+ipcRenderer.on('reply', (event, arg, result) => {
   var message = JSON.parse(arg)
+  message.author = result.author
   $('#message').prepend(getTemplate(message))
 })
 
@@ -24,8 +25,7 @@ button.addEventListener('click', function (e) {
   e.preventDefault()
 
   var messageAttrs = {
-    content: $('#m').val(),
-    author: 'fake-name'
+    content: $('#m').val()
   }
 
   ipcRenderer.send('asynchronous-message', JSON.stringify(messageAttrs))
@@ -50,6 +50,7 @@ function getTemplate (message) {
     content: message.content,
     created_at: message.created_at
   }
+
   var html = messageTemplate(retval)
   return html
 }
