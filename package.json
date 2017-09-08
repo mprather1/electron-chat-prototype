@@ -1,9 +1,10 @@
 {
   "name": "electron-chat-prototype",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "main.js",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "bootstrap": "^3.3.7",
     "chalk": "^2.1.0",
     "electron": "^1.7.5",

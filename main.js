@@ -6,6 +6,22 @@ var io = require('socket.io-client')
 var socket = io.connect('ws://localhost:55445')
 
 let win
+let loginView
+
+ipcMain.on('test', (event, arg) => {
+  got.post('http://localhost:55445/login', {
+    body: arg
+  })
+  .then(res => {
+    var body = JSON.parse(res.body)
+    if (body.message !== 'failure') {
+      createWindow()
+    }
+  })
+  .catch(err => {
+    console.log(err)
+  })
+})
 
 function createWindow () {
   win = new BrowserWindow({
@@ -16,6 +32,7 @@ function createWindow () {
   })
 
   ipcMain.once('connected', (event, arg) => {
+    loginView.close()
     socket.on('message', message => {
       event.sender.send('reply', message)
     })
@@ -32,6 +49,25 @@ function createWindow () {
   win.on('closed', () => {
     win = null
     socket.disconnect()
+  })
+}
+
+function login () {
+  loginView = new BrowserWindow({
+    width: 200,
+    height: 170,
+    frame: false,
+    resizable: true
+  })
+
+  loginView.loadURL(url.format({
+    pathname: path.join(__dirname, 'app', 'login.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
+
+  loginView.on('closed', () => {
+    loginView = null
   })
 }
 
@@ -55,7 +91,7 @@ ipcMain.on('get', (event, arg) => {
   }
 })
 
-app.on('ready', createWindow)
+app.on('ready', login)
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -63,8 +99,8 @@ app.on('window-all-closed', () => {
   }
 })
 
-app.on('activate', () => {
-  if (win === null) {
-    createWindow()
-  }
-})
+// app.on('activate', () => {
+//   if (win === null) {
+//     createWindow()
+//   }
+// })

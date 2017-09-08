@@ -2,19 +2,6 @@ const {ipcRenderer} = require('electron')
 let $ = require('jquery')
 const Handlebars = require('handlebars')
 
-var messageTemplate = Handlebars.compile(`\
-  <li> 
-    <div class="avatar"> 
-      <img src="#" /> 
-    </div>
-    <div class="messages"> 
-      <strong>{{ author }}</strong> wrote:
-      <p>{{ content }}</p> 
-      at <time>{{ created_at }}</time>
-    </div>
-  </li>
-`)
-
 ipcRenderer.send('connected', 'success')
 ipcRenderer.send('get', 'all')
 
@@ -43,6 +30,19 @@ button.addEventListener('click', function (e) {
 
   ipcRenderer.send('asynchronous-message', JSON.stringify(messageAttrs))
 })
+
+var messageTemplate = Handlebars.compile(`\
+  <li> 
+    <div class="avatar"> 
+      <img src="#" /> 
+    </div>
+    <div class="messages"> 
+      <strong>{{ author }}</strong> wrote:
+      <p>{{ content }}</p> 
+      at <time>{{ created_at }}</time>
+    </div>
+  </li>
+`)
 
 function getTemplate (message) {
   var retval = {
